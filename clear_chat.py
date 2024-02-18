@@ -38,7 +38,7 @@ async def clear_private_chat(username: str):
                         if message.author.name == client.user.name:
                             try:
                                 print(f'[Deleted] {message.content}')
-                                # await message.delete()
+                                await message.delete()
                             except discord.Forbidden:
                                 print(f'You do not have proper permissions to delete \"{message.content}\"')
                                 continue
