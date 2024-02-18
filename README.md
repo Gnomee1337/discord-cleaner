@@ -4,6 +4,11 @@ Discord Cleaner deletes all your messages from the specified private dialog in D
 
 ![clear-chat-preview](https://i.imgur.com/adBpDLr.jpeg)
 
+# Use at your own risk:
+>Automating normal user accounts (generally called "self-bots") outside of the OAuth2/bot API is forbidden, and can result in an account termination if found.
+
+https://support.discord.com/hc/en-us/articles/115002192352
+
 # Setup:
 >*IMPORTANT NOTE:* **discord.py package must be v1.7.3 or less.** The ability to automate user actions was removed from version v2.0.0
 ```
