@@ -2,6 +2,8 @@
 
 Discord Cleaner deletes all your messages from the specified private dialog in Discord
 
+![clear-chat-preview](https://i.imgur.com/adBpDLr.jpeg)
+
 # Setup:
 >*IMPORTANT NOTE:* **discord.py package must be v1.7.3 or less.** The ability to automate user actions was removed from version v2.0.0
 ```
