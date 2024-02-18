@@ -58,6 +58,8 @@ async def clear_private_chat(username: str):
 def main():
     if user_token == '':
         print('Please provide discord auth token in .env file (DS_TOKEN=\"your_auth_token\")')
+        return 0
+    global target_username
     target_username = input('Provide the username of the user you want to clear the chat with:\n')
     try:
         client.run(user_token, bot=False)
