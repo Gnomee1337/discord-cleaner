@@ -21,3 +21,16 @@ $ pip install -r requirements.txt
 2. Duplicate **.env.example** file and rename it to **.env**
 3. In **.env** file set your discord auth_token (`DS_TOKEN = "your_auth_token"`)
 5. `$ python3 clear_chat.py`
+
+# Security Disclaimer
+
+This repository contains software that may be capable of interacting with remote services, automating actions, or performing security-related operations.
+
+The project is intended exclusively for:
+- Educational purposes
+- Security research
+- Testing systems you own or are explicitly authorized to test
+
+Do **not** use this software against systems, networks, or services without prior authorization.
+
+The authors assume no liability for misuse or any damages resulting from the use of this software.
